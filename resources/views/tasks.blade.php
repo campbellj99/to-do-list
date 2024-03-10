@@ -11,6 +11,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
+	@include('header')
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form method="POST" action="/create-task">
+                    @csrf
+                    <div class="form-group">
+                        <input required type="text" class="form-control" id="name" name="name" placeholder="Insert Task Name">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <div class="tasks">
+                	<div class="row" style="padding-bottom: 5px; border-bottom: solid; border-color: #ddd; border-width: 2px;">
+                		<div class="col-md-1">#</div>
+                		<div class="col-md-11">Task</div>
+                    </div>
+                    @foreach($tasks as $task)
+                        
+                        <div class="row" style="padding-bottom: 5px; padding-top: 5px; border-bottom: solid; border-color: #ddd; border-width: 1px;">
+	                    	<div class="col-md-1">#{{ $loop->iteration }}</div>
+	                        <div class="col-md-7" style="{{ $task->complete ? 'text-decoration: line-through;' : '' }}">{{ $task->name }}</div>
+	                        <div class="col-md-2">
+	                        	<form method="POST" action="/complete-task">
+	                        		@csrf
+		                        	<input type="hidden" id="id" name="id" value="{{$task->id}}">
+                                    @if($task->complete == true)
+		                        	<button type="submit" class="btn btn-warning btn-xs">Uncomplete</button>
+                                    @else
+                                    <button type="submit" class="btn btn-success btn-xs">Complete</button>
+                                    @endif
+		                    	</form>
+		                    </div>
+	                        <div class="col-md-2">
+	                        	<form method="POST" action="/delete-task">
+	                        		@csrf
+		                        	<input type="hidden" id="id" name="id" value="{{$task->id}}">
+		                        	<button type="submit" class="btn btn-danger btn-xs">Delete</button>
+		                    	</form>
+		                    </div>
+		                    <br>
+	                	</div>
+                    @endforeach
 
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
